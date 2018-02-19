@@ -1,4 +1,4 @@
-package br.frazao.dominio;
+package br.frazao.dominio.elementos;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

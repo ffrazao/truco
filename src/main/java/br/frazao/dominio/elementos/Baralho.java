@@ -1,4 +1,4 @@
-package br.frazao.dominio;
+package br.frazao.dominio.elementos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Baralho {
+
+	public static Baralho criar() {
+		return criar(new ArrayList<>());
+	}
 
 	public static Baralho criar(Fundo fundo) {
 		return criar(fundo, false);
