@@ -9,6 +9,11 @@ import br.frazao.dominio.jogo.Mesa;
 
 public class MesaTruco implements Mesa {
 
+	@Override
+	public String toString() {
+		return "MesaTruco [jogadorList=" + jogadorList + "]";
+	}
+
 	private List<Jogador> jogadorList;
 
 	@Override

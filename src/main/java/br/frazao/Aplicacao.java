@@ -14,20 +14,18 @@ public class Aplicacao {
 
 	public static void main(String[] args) {
 		Jogo jogo = new Truco(true, false);
-		
+
 		Mesa mesa = new MesaTruco();
 		mesa.adicionarJogador(new JogadorTruco("João"));
 		mesa.adicionarJogador(new JogadorTruco("Maria"));
-		mesa.adicionarJogador(new JogadorTruco("José"));
-		mesa.adicionarJogador(new JogadorTruco("Ana"));
-		
-		mesa.getJogadorList().forEach(j -> System.out.format("Ocupo a cadeira número %d. Eu sou %s, antes de mim vem %s e depois de mim vem %s.\n", mesa.getJogador(j), j, mesa.getJogadorAntes(j).get(), mesa.getJogadorDepois(j).get()));
-		
+		mesa.adicionarJogador(new JogadorTruco("José", (JogadorTruco) mesa.getJogador(0).get()));
+		mesa.adicionarJogador(new JogadorTruco("Ana", (JogadorTruco) mesa.getJogador(1).get()));
+
+		mesa.getJogadorList().forEach(j -> System.out.format("Ocupo a cadeira número %d. Eu sou %s, antes de mim vem %s e depois de mim vem %s. Faço parte do time %s\n", mesa.getJogador(j), j, mesa.getJogadorAntes(j).get(), mesa.getJogadorDepois(j).get(), ((JogadorTruco) j).getTime()));
 		Stream.of(Numero.valoresOrdenados()).forEach(n -> System.out.format("Ocupo a posição número %d. Eu sou o numero %s, antes de mim vem %s e depois de mim vem %s.\n", n.getOrdem(), n, n.getNumeroAntes(n), n.getNumeroDepois(n)));
-		
 		Stream.of(Naipe.valoresOrdenados()).forEach(n -> System.out.format("Ocupo a posição número %d. Eu sou o naipe %s, antes de mim vem %s e depois de mim vem %s.\n", n.getOrdem(), n, n.getNaipeAntes(n), n.getNaipeDepois(n)));
-		
-		//jogo.jogar(mesa);
+
+		jogo.jogar(mesa);
 	}
 
 }

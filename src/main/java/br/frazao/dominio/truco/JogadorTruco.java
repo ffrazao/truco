@@ -1,7 +1,11 @@
 package br.frazao.dominio.truco;
 
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import br.frazao.dominio.elementos.Baralho;
 import br.frazao.dominio.elementos.Carta;
@@ -15,13 +19,32 @@ public class JogadorTruco implements Jogador {
 
 	private String nome;
 
-	public JogadorTruco(String nome) {
-		this.nome = nome;
+	private Set<JogadorTruco> time;
+
+	public JogadorTruco(String nome, JogadorTruco... parceiroList) {
+		this.nome = Objects.requireNonNull(nome);
+		Stream.of(parceiroList).forEach(this::adicionarParceiro);
+	}
+
+	public void adicionarParceiro(JogadorTruco parceiro) {
+		this.getTime().add(Objects.requireNonNull(parceiro)); // ele é meu
+																// parceiro
+		parceiro.getTime().add(this); // eu sou parceiro dele
+		this.getTime().stream().filter(p -> !p.equals(this)).forEach(p -> {
+			// os meus parceiros também são parceiros dele
+			p.getTime().add(parceiro);
+			parceiro.getTime().add(p);
+		});
+		parceiro.getTime().stream().forEach(p -> {
+			// os parceiros dele também são meus parceiros
+			p.getTime().add(this);
+			this.getTime().add(p);
+		});
 	}
 
 	@Override
 	public int compareTo(Jogador o) {
-		return getNome().compareTo(o.getNome());
+		return Normalizer.normalize(getNome(), Normalizer.Form.NFD).compareTo(Normalizer.normalize(o.getNome(), Normalizer.Form.NFD));
 	}
 
 	@Override
@@ -61,6 +84,14 @@ public class JogadorTruco implements Jogador {
 		return Objects.requireNonNull(this.nome);
 	}
 
+	public Set<JogadorTruco> getTime() {
+		if (this.time == null) {
+			this.time = new TreeSet<>();
+			this.time.add(this);
+		}
+		return this.time;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -78,6 +109,24 @@ public class JogadorTruco implements Jogador {
 		Truco truco = (Truco) jogo;
 
 		return null;
+	}
+
+	public void removeParceiro(JogadorTruco parceiro) {
+		// ele é meu parceiro
+		this.getTime().remove(Objects.requireNonNull(parceiro));
+		// eu sou parceiro dele
+		parceiro.getTime().remove(this);
+
+		// os meus parceiros também são parceiros dele
+		this.getTime().stream().filter(p -> !p.equals(this)).forEach(p -> {
+			p.getTime().remove(parceiro);
+			parceiro.getTime().remove(p);
+		});
+		// os parceiros dele também são meus parceiros
+		parceiro.getTime().stream().forEach(p -> {
+			p.getTime().remove(this);
+			this.getTime().remove(p);
+		});
 	}
 
 	@Override

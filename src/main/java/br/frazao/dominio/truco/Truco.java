@@ -3,26 +3,32 @@ package br.frazao.dominio.truco;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 import br.frazao.dominio.elementos.Baralho;
-import br.frazao.dominio.elementos.Carta;
 import br.frazao.dominio.elementos.Fundo;
 import br.frazao.dominio.elementos.Naipe;
 import br.frazao.dominio.elementos.Numero;
-import br.frazao.dominio.jogo.Jogador;
 import br.frazao.dominio.jogo.Jogo;
 import br.frazao.dominio.jogo.Mesa;
 import br.frazao.dominio.jogo.Resultado;
 
 public class Truco implements Jogo {
 
-	private Baralho baralho;
+	private static final Integer TOTAL_TENTOS_PARTIDA = 13;
 
-	private Baralho monte;
+	private Baralho baralho;
 
 	private boolean baralhoVazio = false;
 
 	private List<Mao> maoList;
+
+	private Mesa mesa;
+
+	private Baralho monte;
 
 	private boolean usarCoringa = false;
 
@@ -65,20 +71,12 @@ public class Truco implements Jogo {
 		return baralho;
 	}
 
-	Baralho getMonte() {
-		if (this.monte == null) {
-			this.monte = Baralho.criar();
-		}
-		return this.monte;
+	Mao getMao() {
+		return getMao(getMaoList().size() - 1);
 	}
 
-	/**
-	 * retorna a mão atual
-	 * 
-	 * @return
-	 */
-	Mao getMao() {
-		return getMaoList().get(getMaoList().size() - 1);
+	Mao getMao(Integer posicao) {
+		return getMaoList().get(posicao);
 	}
 
 	private List<Mao> getMaoList() {
@@ -88,24 +86,43 @@ public class Truco implements Jogo {
 		return maoList;
 	}
 
-	public Map<List<Jogador>, Integer> getTentos() {
+	Mesa getMesa() {
+		return mesa;
+	}
+
+	Baralho getMonte() {
+		if (this.monte == null) {
+			this.monte = Baralho.criar();
+		}
+		return this.monte;
+	}
+
+	public Map<Set<JogadorTruco>, Integer> getTentos() {
+		Map<Set<JogadorTruco>, Integer> result = new TreeMap<>();
+		getMesa().getJogadorList().stream().forEach(j -> result.put(((JogadorTruco) j).getTime(), 0));
+		return result;
+	}
+
+	Integer getTentos(JogadorTruco jogador) {
 		return null;
 	}
 
-	Integer getTentos(Jogador jogador) {
+	Integer getTentos(Set<JogadorTruco> jogador) {
 		return null;
 	}
 
-	Integer getTentos(List<Jogador> jogador) {
+	Map<Set<JogadorTruco>, Integer> getTentos(Mao mao) {
 		return null;
 	}
 
-	Map<List<Jogador>, Integer> getTentos(Mao mao) {
-		return null;
-	}
-
-	public List<Jogador> getVencedor() {
-		return null;
+	public Set<JogadorTruco> getVencedor() {
+		AtomicReference<Set<JogadorTruco>> vencedor = new AtomicReference<>();
+		getTentos().forEach((k, v) -> {
+			if (v.compareTo(TOTAL_TENTOS_PARTIDA) >= 0) {
+				vencedor.set(k);
+			}
+		});
+		return vencedor.get();
 	}
 
 	public boolean isBaralhoVazio() {
@@ -119,29 +136,15 @@ public class Truco implements Jogo {
 	public boolean isViraCarta() {
 		return viraCarta;
 	}
-	
+
 	@Override
 	public Resultado jogar(Mesa mesa) {
+		this.mesa = Objects.requireNonNull(mesa);
+		JogadorTruco jogadorMao = (JogadorTruco) getMesa().getJogador(0).get();
 		do {
-			// recolher todas as cartas
-			mesa.getJogadorList().forEach(jogador -> getBaralho().encarta(jogador.getBaralho().descarta(jogador.getBaralho().getCartas()).get()));
-			getBaralho().encarta(monte.descarta(monte.getCartas()).get());
-			getMao().getCartaVirada().ifPresent(carta -> getBaralho().encarta(carta));
-			
-			// embaralhar
-			getBaralho().embaralha();
-
-			// cortar
-			monte.encarta(getMao().getMao().cortar(getBaralho()));
-
-			// distribuir
-			mesa.getJogadorList().forEach(jogador -> getBaralho().encarta(jogador.getBaralho().getCartas()));
-
-			// captar jogadas
-
-			getMaoList().add(new Mao());
-
+			getMaoList().add(new Mao(jogadorMao));
 			getMao().jogar(this);
+			jogadorMao = (JogadorTruco) getMesa().getJogadorDepois(jogadorMao).get();
 		} while (getVencedor() == null);
 
 		return new ResultadoTruco(getMaoList());
