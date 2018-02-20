@@ -15,8 +15,6 @@ public class Carta implements Comparable<Carta> {
 
 	private Numero numero;
 
-	private Integer peso;
-
 	private Carta(Fundo fundo, Numero numero, Naipe naipe) {
 		super();
 		this.fundo = Objects.requireNonNull(fundo);
@@ -66,10 +64,6 @@ public class Carta implements Comparable<Carta> {
 		return this.isCoringa() ? 0 : (((this.getNaipe().get().getOrdem() - 1) * Numero.values().length) + this.getNumero().get().getOrdem());
 	}
 
-	public Integer getPeso() {
-		return peso;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -82,10 +76,6 @@ public class Carta implements Comparable<Carta> {
 
 	public boolean isCoringa() {
 		return this.numero == null && this.naipe == null;
-	}
-
-	public void setPeso(Integer peso) {
-		this.peso = peso;
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import java.util.List;
 import br.frazao.dominio.elementos.Baralho;
 import br.frazao.dominio.elementos.Carta;
 
-public interface Jogador {
+public interface Jogador extends Comparable<Jogador> {
 
 	public List<Carta> cortar(Baralho baralho);
 

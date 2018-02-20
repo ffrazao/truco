@@ -34,6 +34,16 @@ public enum Naipe {
 		return descricao;
 	}
 
+	public Naipe getNaipeAntes(Naipe naipe) {
+		int posicao = naipe.getOrdem() - 1 <= 0 ? Naipe.values().length : naipe.getOrdem() - 1;
+		return Stream.of(Naipe.values()).filter(n -> n.getOrdem() == posicao).findAny().get();
+	}
+
+	public Naipe getNaipeDepois(Naipe naipe) {
+		int posicao = naipe.getOrdem() + 1 > Naipe.values().length ? 1 : naipe.getOrdem() + 1;
+		return Stream.of(Naipe.values()).filter(n -> n.getOrdem() == posicao).findAny().get();
+	}
+
 	public int getOrdem() {
 		return ordem;
 	}

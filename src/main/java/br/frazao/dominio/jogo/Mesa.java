@@ -1,15 +1,22 @@
 package br.frazao.dominio.jogo;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Mesa {
 	
-	public void adicionaJogador(Jogador jogador);
+	public void adicionarJogador(Jogador jogador);
 	
-	public Jogador getJogador(Integer posicao);
+	public Optional<Jogador> getJogador(Integer posicao);
 	
-	public Jogador getJogador(Jogador jogador);
+	public Integer getJogador(Jogador jogador);
 	
-	public List<Jogador> getMesa();
+	public Optional<Jogador> getJogadorAntes(Jogador jogador);
+	
+	public Optional<Jogador> getJogadorDepois(Jogador jogador);
+
+	public List<Jogador> getJogadorList();
+
+	public void removerJogador(Jogador jogador);
 
 }

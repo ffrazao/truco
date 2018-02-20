@@ -24,6 +24,16 @@ public enum Numero {
 		return descricao;
 	}
 
+	public Numero getNumeroAntes(Numero numero) {
+		int posicao = numero.getOrdem() - 1 <= 0 ? Numero.values().length : numero.getOrdem() - 1;
+		return Stream.of(Numero.values()).filter(n -> n.getOrdem() == posicao).findAny().get();
+	}
+
+	public Numero getNumeroDepois(Numero numero) {
+		int posicao = numero.getOrdem() + 1 > Numero.values().length ? 1 : numero.getOrdem() + 1;
+		return Stream.of(Numero.values()).filter(n -> n.getOrdem() == posicao).findAny().get();
+	}
+
 	public int getOrdem() {
 		return ordem;
 	}

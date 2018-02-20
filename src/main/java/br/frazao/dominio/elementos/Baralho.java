@@ -93,10 +93,6 @@ public class Baralho {
 		return getCartas().stream().filter(carta -> carta.getFundo().equals(fundo) && carta.getNumero().equals(numero) && carta.getNaipe().equals(naipe)).findAny();
 	}
 
-	public Optional<Carta> getCartaPorPeso(Integer pesquisa) {
-		return getCartas().stream().filter(carta -> carta.getPeso().equals(Objects.requireNonNull(pesquisa))).findAny();
-	}
-
 	public List<Carta> getCartas() {
 		if (this.cartas == null) {
 			this.cartas = new ArrayList<>();
@@ -143,30 +139,8 @@ public class Baralho {
 		return getCartas().stream().skip(Objects.requireNonNull(pesquisa)).collect(Collectors.toList());
 	}
 
-	public Optional<Integer> getPesoMaior() {
-		return getCartas().stream().max((c1, c2) -> Integer.compare(c1.getPeso(), c2.getPeso())).map(Carta::getPeso);
-	}
-
-	public Optional<Integer> getPesoMenor() {
-		return getCartas().stream().min((c1, c2) -> Integer.compare(c1.getPeso(), c2.getPeso())).map(Carta::getPeso);
-	}
-
 	public Baralho ordena() {
 		Collections.sort(getCartas());
-		return this;
-	}
-
-	public Baralho setPeso(Integer peso, Carta... cartas) {
-		return setPeso(peso, Arrays.asList(cartas));
-	}
-
-	public Baralho setPeso(Integer peso, List<Carta> cartas) {
-		getCartas(cartas).forEach(carta -> setPeso(peso, Optional.ofNullable(carta)));
-		return this;
-	}
-
-	public Baralho setPeso(Integer peso, Optional<Carta> carta) {
-		carta.ifPresent(c -> getCarta(c).ifPresent(c1 -> c1.setPeso(Objects.requireNonNull(peso))));
 		return this;
 	}
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.frazao.dominio.elementos.Baralho;
+import br.frazao.dominio.elementos.Carta;
 import br.frazao.dominio.elementos.Fundo;
 import br.frazao.dominio.elementos.Naipe;
 import br.frazao.dominio.elementos.Numero;
@@ -63,7 +64,7 @@ public class Truco implements Jogo {
 		}
 		return baralho;
 	}
-	
+
 	Baralho getMonte() {
 		if (this.monte == null) {
 			this.monte = Baralho.criar();
@@ -118,27 +119,28 @@ public class Truco implements Jogo {
 	public boolean isViraCarta() {
 		return viraCarta;
 	}
-
+	
 	@Override
 	public Resultado jogar(Mesa mesa) {
 		do {
 			// recolher todas as cartas
-			mesa.getMesa().forEach(jogador -> getBaralho().encarta(jogador.getBaralho().getCartas()));
-			getBaralho().encarta(monte.getCartas());
+			mesa.getJogadorList().forEach(jogador -> getBaralho().encarta(jogador.getBaralho().descarta(jogador.getBaralho().getCartas()).get()));
+			getBaralho().encarta(monte.descarta(monte.getCartas()).get());
+			getMao().getCartaVirada().ifPresent(carta -> getBaralho().encarta(carta));
 			
 			// embaralhar
 			getBaralho().embaralha();
-			
+
 			// cortar
 			monte.encarta(getMao().getMao().cortar(getBaralho()));
-			
+
 			// distribuir
-			mesa.getMesa().forEach(jogador -> getBaralho().encarta(jogador.getBaralho().getCartas()));
-			
+			mesa.getJogadorList().forEach(jogador -> getBaralho().encarta(jogador.getBaralho().getCartas()));
+
 			// captar jogadas
 
 			getMaoList().add(new Mao());
-			
+
 			getMao().jogar(this);
 		} while (getVencedor() == null);
 
