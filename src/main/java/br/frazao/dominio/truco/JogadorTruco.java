@@ -1,14 +1,13 @@
 package br.frazao.dominio.truco;
 
 import java.text.Normalizer;
-import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import br.frazao.dominio.elementos.Baralho;
-import br.frazao.dominio.elementos.Carta;
 import br.frazao.dominio.jogo.Jogada;
 import br.frazao.dominio.jogo.Jogador;
 import br.frazao.dominio.jogo.Jogo;
@@ -48,10 +47,12 @@ public class JogadorTruco implements Jogador {
 	}
 
 	@Override
-	public List<Carta> cortar(Baralho baralho) {
-		int totalCartas = baralho.getCartas().size();
-		int corte = (totalCartas * (-1)) + (int) (Math.random() * (totalCartas));
-		return baralho.descarta(baralho.getCartas(corte)).get();
+	public Integer cortar(Integer totalCartas, Integer limite) {
+		Integer result = new Random().nextInt(Math.abs(totalCartas) + 1 - (Math.abs(totalCartas) * (-1))) + (Math.abs(totalCartas) * (-1));
+		if (Math.abs(limite) - Math.abs(result) > 0) {
+			result = result < 0 ? -Math.abs(limite) : Math.abs(limite);
+		}
+		return result;
 	}
 
 	@Override

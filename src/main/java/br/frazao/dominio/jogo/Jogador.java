@@ -1,13 +1,10 @@
 package br.frazao.dominio.jogo;
 
-import java.util.List;
-
 import br.frazao.dominio.elementos.Baralho;
-import br.frazao.dominio.elementos.Carta;
 
 public interface Jogador extends Comparable<Jogador> {
 
-	public List<Carta> cortar(Baralho baralho);
+	public Integer cortar(Integer totalCartas, Integer limite);
 
 	public Baralho getBaralho();
 
