@@ -47,12 +47,9 @@ public class JogadorTruco implements Jogador {
 	}
 
 	@Override
-	public Integer cortar(Integer totalCartas, Integer limite) {
-		Integer result = new Random().nextInt(Math.abs(totalCartas) + 1 - (Math.abs(totalCartas) * (-1))) + (Math.abs(totalCartas) * (-1));
-		if (Math.abs(limite) - Math.abs(result) > 0) {
-			result = result < 0 ? -Math.abs(limite) : Math.abs(limite);
-		}
-		return result;
+	public Integer cortar(Integer totalCartas, Integer minimoCartasDoCorte) {
+		Integer result = new Random().nextInt(totalCartas + 1 - (-totalCartas)) + (-totalCartas);
+		return result < -minimoCartasDoCorte || result > minimoCartasDoCorte ? result : minimoCartasDoCorte;
 	}
 
 	@Override

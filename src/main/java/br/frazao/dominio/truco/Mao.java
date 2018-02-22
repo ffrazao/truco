@@ -10,6 +10,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import br.frazao.dominio.elementos.Baralho;
 import br.frazao.dominio.elementos.Carta;
 import br.frazao.dominio.elementos.Naipe;
 import br.frazao.dominio.elementos.Numero;
@@ -111,43 +112,25 @@ public class Mao {
 		
 		// embaralhar
 		truco.getBaralho().embaralha();
-
-		// cortar
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
-		int corte = truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO); 
 		
-//		truco.getMonte().encarta(.cortar(truco.getBaralho()));
-
+		// cortar o baralho
+		int corte = truco.getMesa().getJogadorAntes(truco.getMao().getJogadorMao()).get().cortar(truco.getBaralho().getCartas().size(), truco.getMesa().getJogadorList().size() * TOTAL_CARTAS_DISTRIBUIR_MAO + (truco.isViraCarta() ? 1 : 0));
+		
+		// verificar se é necessário virar carta()
+		Carta cartaVirada = null;
+		if (truco.isViraCarta()) {
+			cartaVirada = truco.getBaralho().descarta(Optional.ofNullable(truco.getBaralho().getCartas(corte < 0 ? -1 : 1).get(0))).get();
+		}
+		setCartaVirada(cartaVirada);
+		
+		Baralho temp = Baralho.criar(truco.getBaralho().descarta(truco.getBaralho().getCartas(corte)).get());
+		truco.getMonte().encarta(truco.getBaralho().descarta().get());
+		truco.getBaralho().encarta(temp.getCartas());
+		
 		// distribuir
-		truco.getMesa().getJogadorList().forEach(jogador -> truco.getBaralho().encarta(jogador.getBaralho().getCartas()));
-
+		int distribui = corte < 0 ? -TOTAL_CARTAS_DISTRIBUIR_MAO : TOTAL_CARTAS_DISTRIBUIR_MAO; 
+		truco.getMesa().getJogadorList().stream().forEach(j->j.getBaralho().encarta(truco.getBaralho().descarta(truco.getBaralho().getCartas(distribui)).get()));
+		
 		// captar jogadas
 
 		return this;
