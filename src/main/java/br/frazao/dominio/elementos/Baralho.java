@@ -2,7 +2,6 @@ package br.frazao.dominio.elementos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,7 +23,7 @@ public class Baralho {
 		if (usarCoringa) {
 			cartas.add(Carta.criar(fundo, null, null));
 		}
-		Stream.of(Naipe.valoresOrdenados()).forEach(naipe -> Stream.of(Numero.valoresOrdenados()).forEach(numero -> cartas.add(Carta.criar(fundo, numero, naipe))));
+		Stream.of(Naipe.valoresOrdenados()).forEachOrdered(naipe -> Stream.of(Numero.valoresOrdenados()).forEachOrdered(numero -> cartas.add(Carta.criar(fundo, numero, naipe))));
 		return criar(cartas);
 	}
 
@@ -47,10 +46,8 @@ public class Baralho {
 	}
 
 	public Optional<List<Carta>> descarta(List<Carta> cartas) {
-		List<Carta> result = new ArrayList<>();
-		result = Objects.requireNonNull(cartas).stream().filter(carta -> carta != null).collect(Collectors.toList());
-		getCartas().removeAll(result);
-		return Optional.ofNullable(result);
+		List<Carta> result = Objects.requireNonNull(cartas).stream().filter(carta -> carta != null).collect(Collectors.toList());
+		return getCartas().removeAll(result) ? Optional.ofNullable(result) : Optional.empty();
 	}
 
 	public Optional<Carta> descarta(Optional<Carta> carta) {
@@ -62,17 +59,14 @@ public class Baralho {
 		return Optional.empty();
 	}
 
-	public Baralho embaralha() {
-		Collections.shuffle(getCartas());
-		return this;
-	}
-
 	public Baralho encarta(Carta... cartas) {
 		return encarta(Arrays.asList(cartas));
 	}
 
 	public Baralho encarta(List<Carta> cartas) {
-		Objects.requireNonNull(cartas).stream().forEach(encarta -> encarta(Optional.of(encarta)));
+		if (cartas != null && !cartas.isEmpty()) {
+			cartas.stream().forEach(carta -> encarta(Optional.of(carta)));
+		}
 		return this;
 	}
 
@@ -90,7 +84,7 @@ public class Baralho {
 	}
 
 	public Optional<Carta> getCarta(Fundo fundo, Optional<Numero> numero, Optional<Naipe> naipe) {
-		return getCartas().stream().filter(carta -> carta.getFundo().equals(fundo) && carta.getNumero().equals(numero) && carta.getNaipe().equals(naipe)).findAny();
+		return getCartas().stream().filter(carta -> fundo.equals(carta.getFundo()) && numero.equals(carta.getNumero()) && naipe.equals(carta.getNaipe())).findAny();
 	}
 
 	public List<Carta> getCartas() {
@@ -100,8 +94,8 @@ public class Baralho {
 		return this.cartas;
 	}
 
-	public List<Carta> getCartas(Carta... cartas) {
-		return getCartas(Arrays.asList(cartas));
+	public List<Carta> getCartas(Carta... pesquisa) {
+		return getCartas(Arrays.asList(pesquisa));
 	}
 
 	public List<Carta> getCartas(Fundo pesquisa) {
@@ -109,7 +103,7 @@ public class Baralho {
 	}
 
 	public List<Carta> getCartas(Integer pesquisa) {
-		return Objects.requireNonNull(pesquisa) >= 0 ? getCartasDesce(pesquisa) : getCartasSobe(pesquisa * (-1));
+		return Objects.requireNonNull(pesquisa) >= 0 ? getCartasDesce(Math.abs(pesquisa)) : getCartasSobe(-Math.abs(pesquisa));
 	}
 
 	public List<Carta> getCartas(List<Carta> pesquisa) {
@@ -121,27 +115,19 @@ public class Baralho {
 	}
 
 	public List<Carta> getCartas(Numero pesquisa) {
-		Objects.requireNonNull(pesquisa);
-		return getCartas().stream().filter(carta -> pesquisa.equals(carta.getNumero().orElse(null))).collect(Collectors.toList());
+		return getCartas().stream().filter(carta -> Objects.requireNonNull(pesquisa).equals(carta.getNumero().orElse(null))).collect(Collectors.toList());
 	}
 
 	public List<Carta> getCartas(Numero numero, Naipe naipe) {
-		Objects.requireNonNull(numero);
-		Objects.requireNonNull(naipe);
-		return getCartas().stream().filter(carta -> numero.equals(carta.getNumero().orElse(null)) && naipe.equals(carta.getNaipe().orElse(null))).collect(Collectors.toList());
+		return getCartas().stream().filter(carta -> Objects.requireNonNull(numero).equals(carta.getNumero().orElse(null)) && Objects.requireNonNull(naipe).equals(carta.getNaipe().orElse(null))).collect(Collectors.toList());
 	}
 
 	public List<Carta> getCartasDesce(Integer pesquisa) {
-		return getCartas().stream().limit(Objects.requireNonNull(pesquisa)).collect(Collectors.toList());
+		return getCartas().stream().limit(Math.abs(Objects.requireNonNull(pesquisa))).collect(Collectors.toList());
 	}
 
 	public List<Carta> getCartasSobe(Integer pesquisa) {
-		return getCartas().stream().skip(Objects.requireNonNull(pesquisa)).collect(Collectors.toList());
-	}
-
-	public Baralho ordena() {
-		Collections.sort(getCartas());
-		return this;
+		return getCartas().stream().skip(getCartas().size() - Math.abs(Objects.requireNonNull(pesquisa))).collect(Collectors.toList());
 	}
 
 	@Override

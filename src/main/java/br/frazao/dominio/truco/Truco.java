@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -18,7 +19,9 @@ import br.frazao.dominio.jogo.Resultado;
 
 public class Truco implements Jogo {
 
-	private static final Integer TOTAL_TENTOS_PARTIDA = 13;
+	public static final int TOTAL_CARTAS_DISTRIBUIR_MAO = 3;
+
+	public static final int TOTAL_TENTOS_PARTIDA = 12;
 
 	private Baralho baralho;
 
@@ -33,7 +36,7 @@ public class Truco implements Jogo {
 	private boolean usarCoringa = false;
 
 	private boolean viraCarta = false;
-
+	
 	public Truco(boolean viraCarta, boolean baralhoVazio) {
 		this(viraCarta, baralhoVazio, false);
 	}
@@ -71,15 +74,18 @@ public class Truco implements Jogo {
 		return baralho;
 	}
 
-	Mao getMao() {
+	Optional<Mao> getMao() {
 		return getMao(getMaoList().size() - 1);
 	}
 
-	Mao getMao(Integer posicao) {
-		return getMaoList().get(posicao);
+	Optional<Mao> getMao(Integer posicao) {
+		if (getMaoList().isEmpty() || posicao < 0 || posicao >= getMaoList().size()) {
+			return Optional.empty();
+		}
+		return Optional.ofNullable(getMaoList().get(posicao));
 	}
 
-	private List<Mao> getMaoList() {
+	List<Mao> getMaoList() {
 		if (maoList == null) {
 			maoList = new ArrayList<>();
 		}
@@ -98,7 +104,7 @@ public class Truco implements Jogo {
 	}
 
 	public Map<Set<JogadorTruco>, Integer> getTentos() {
-		Map<Set<JogadorTruco>, Integer> result = new TreeMap<>();
+		Map<Set<JogadorTruco>, Integer> result = new TreeMap<>((t1, t2) -> t1.containsAll(t2) ? 0 : 1);
 		getMesa().getJogadorList().stream().forEach(j -> result.put(((JogadorTruco) j).getTime(), 0));
 		return result;
 	}
@@ -107,11 +113,11 @@ public class Truco implements Jogo {
 		return null;
 	}
 
-	Integer getTentos(Set<JogadorTruco> jogador) {
+	Map<Set<JogadorTruco>, Integer> getTentos(Mao mao) {
 		return null;
 	}
 
-	Map<Set<JogadorTruco>, Integer> getTentos(Mao mao) {
+	Integer getTentos(Set<JogadorTruco> jogador) {
 		return null;
 	}
 
@@ -139,15 +145,23 @@ public class Truco implements Jogo {
 
 	@Override
 	public Resultado jogar(Mesa mesa) {
-		this.mesa = Objects.requireNonNull(mesa);
+		setMesa(mesa);
+
 		JogadorTruco jogadorMao = (JogadorTruco) getMesa().getJogador(0).get();
 		do {
 			getMaoList().add(new Mao(jogadorMao));
-			getMao().jogar(this);
+			getMao().get().jogar(this);
 			jogadorMao = (JogadorTruco) getMesa().getJogadorDepois(jogadorMao).get();
 		} while (getVencedor() == null);
 
 		return new ResultadoTruco(getMaoList());
+	}
+
+	private void setMesa(Mesa mesa) {
+		if (Objects.requireNonNull(mesa).getJogadorList().isEmpty()) {
+			throw new IllegalStateException();
+		}
+		this.mesa = mesa;
 	}
 
 }

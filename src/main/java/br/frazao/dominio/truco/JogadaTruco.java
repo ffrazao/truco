@@ -10,6 +10,13 @@ import br.frazao.dominio.jogo.Jogador;
 
 public class JogadaTruco implements Jogada {
 
+	public JogadaTruco(Jogador jogador, Carta carta, boolean virada) {
+		super();
+		this.jogador = jogador;
+		this.carta = carta;
+		this.virada = virada;
+	}
+
 	private List<Aposta> apostaList;
 
 	private Carta carta;

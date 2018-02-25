@@ -1,6 +1,7 @@
 package br.frazao.dominio.truco;
 
 import java.text.Normalizer;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class JogadorTruco implements Jogador {
 
 	@Override
 	public Integer cortar(Integer totalCartas, Integer minimoCartasDoCorte) {
-		Integer result = new Random().nextInt(totalCartas + 1 - (-totalCartas)) + (-totalCartas);
+		Integer result = new Random().nextInt(totalCartas + 1 - (-totalCartas + 1)) + (-totalCartas + 1);
 		return result < -minimoCartasDoCorte || result > minimoCartasDoCorte ? result : minimoCartasDoCorte;
 	}
 
@@ -105,8 +106,16 @@ public class JogadorTruco implements Jogador {
 	@Override
 	public Jogada jogar(Jogo jogo) {
 		Truco truco = (Truco) jogo;
+		JogadaTruco result = new JogadaTruco(this, getBaralho().descarta(getBaralho().getCartas(1)).get().get(0), false);
+		return result;
+	}
 
-		return null;
+	public void embaralhar(Baralho baralho) {
+		Collections.shuffle(baralho.getCartas());
+	}
+
+	public void ordenar(Baralho baralho) {
+		Collections.sort(baralho.getCartas());
 	}
 
 	public void removeParceiro(JogadorTruco parceiro) {

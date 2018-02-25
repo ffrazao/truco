@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 public enum Numero {
 
-	AS("Ás", 1), CINCO("Cinco", 5), DAMA("Dama", 12), DEZ("Dez", 10), DOIS("Dois", 2), NOVE("Nove", 9), OITO("Oito", 8), QUATRO("Quatro", 4), REI("Rei", 13), SEIS("Seis", 6), SETE("Sete", 7), TRES("Três", 3), VALETE("Valete", 11);
+	AS("Ás", 1), CINCO("Cinco", 5), DAMA("Dama", 12), DEZ("Dez", 10), DOIS("Dois", 2), NOVE("Nove", 9), OITO("Oito", 8), QUATRO("Quatro", 4), REIS("Reis", 13), SEIS("Seis", 6), SETE("Sete", 7), TRES("Três", 3), VALETE("Valete", 11);
 
 	public static Numero[] valoresOrdenados() {
 		return Stream.of(values()).sorted((n1, n2) -> Integer.compare(n1.getOrdem(), n2.getOrdem())).collect(Collectors.toList()).toArray(new Numero[Numero.values().length]);
