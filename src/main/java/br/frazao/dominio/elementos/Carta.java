@@ -60,7 +60,7 @@ public class Carta implements Comparable<Carta> {
 		return Optional.ofNullable(this.numero);
 	}
 
-	public int getOrdem() {
+	public Integer getOrdem() {
 		return this.isCoringa() ? 0 : (((this.getNaipe().get().getOrdem() - 1) * Numero.values().length) + this.getNumero().get().getOrdem());
 	}
 
