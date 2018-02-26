@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import br.frazao.dominio.elementos.Baralho;
 import br.frazao.dominio.elementos.Carta;
 import br.frazao.dominio.elementos.Naipe;
 import br.frazao.dominio.elementos.Numero;
@@ -24,7 +23,7 @@ public class Mao {
 
 	private static final List<Numero> CARTA_VIRADA_ORDEM_DECRESCENTE_NUMERO = Arrays.asList(Numero.TRES, Numero.DOIS, Numero.AS, Numero.REIS, Numero.VALETE, Numero.DAMA, Numero.SETE, Numero.SEIS, Numero.CINCO, Numero.QUATRO);
 
-	private Map<Set<Carta>, Integer> cartaPesoMap;
+	private Map<SortedSet<Carta>, Integer> cartaPesoMap;
 
 	private Carta cartaVirada;
 
@@ -52,7 +51,7 @@ public class Mao {
 		return cartaList.stream().map(this::getCartaPeso).max((p1, p2) -> Integer.compare(p1, p2));
 	}
 
-	Map<Set<Carta>, Integer> getCartaPesoMap() {
+	Map<SortedSet<Carta>, Integer> getCartaPesoMap() {
 		if (this.cartaPesoMap == null) {
 			this.cartaPesoMap = new TreeMap<>();
 		}
@@ -127,9 +126,7 @@ public class Mao {
 		}
 		setCartaVirada(cartaVirada);
 
-		Baralho temp = Baralho.criar(getTruco().getBaralho().descarta(getTruco().getBaralho().getCartas(corte)).get());
-		getTruco().getMonte().encarta(getTruco().getBaralho().descarta().orElse(null));
-		getTruco().getBaralho().encarta(temp.getCartas());
+		truco.getMonte().encarta(truco.getBaralho().descarta(truco.getBaralho().getCartas(corte >= 0 ? corte - truco.getBaralho().getCartas().size() : truco.getBaralho().getCartas().size() + corte)).get());
 
 		// distribuir
 		int distribui = corte < 0 ? -Truco.TOTAL_CARTAS_DISTRIBUIR_MAO : Truco.TOTAL_CARTAS_DISTRIBUIR_MAO;
@@ -244,7 +241,7 @@ public class Mao {
 		}
 	}
 
-	void setCartaPesoMap(Map<Set<Carta>, Integer> cartaPesoMap) {
+	void setCartaPesoMap(Map<SortedSet<Carta>, Integer> cartaPesoMap) {
 		this.cartaPesoMap = cartaPesoMap;
 	}
 
