@@ -35,17 +35,17 @@ public class Truco implements Jogo {
 
 	private boolean usarCoringa = false;
 
-	private boolean viraCarta = false;
+	private boolean cartaVirada = false;
 	
-	public Truco(boolean viraCarta, boolean baralhoVazio) {
-		this(viraCarta, baralhoVazio, false);
+	public Truco(boolean cartaVirada, boolean baralhoVazio) {
+		this(cartaVirada, baralhoVazio, false);
 	}
 
-	public Truco(boolean viraCarta, boolean baralhoVazio, boolean usarCoringa) {
+	public Truco(boolean cartaVirada, boolean baralhoVazio, boolean usarCoringa) {
 		super();
-		this.viraCarta = viraCarta;
+		this.cartaVirada = cartaVirada;
 		this.baralhoVazio = baralhoVazio;
-		this.usarCoringa = viraCarta ? false : usarCoringa;
+		this.usarCoringa = cartaVirada ? false : usarCoringa;
 	}
 
 	Baralho getBaralho() {
@@ -59,7 +59,7 @@ public class Truco implements Jogo {
 			if (isBaralhoVazio()) {
 				baralho.descarta(baralho.getCartas(Numero.SEIS));
 				baralho.descarta(baralho.getCartas(Numero.CINCO));
-				if (isViraCarta()) {
+				if (isCartaVirada()) {
 					baralho.descarta(baralho.getCartas(Numero.SETE));
 					baralho.descarta(baralho.getCartas(Numero.QUATRO));
 				} else {
@@ -139,8 +139,8 @@ public class Truco implements Jogo {
 		return usarCoringa;
 	}
 
-	public boolean isViraCarta() {
-		return viraCarta;
+	public boolean isCartaVirada() {
+		return cartaVirada;
 	}
 
 	@Override

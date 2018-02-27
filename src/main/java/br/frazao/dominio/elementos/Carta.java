@@ -1,6 +1,5 @@
 package br.frazao.dominio.elementos;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class Carta implements Comparable<Carta> {
@@ -17,7 +16,7 @@ public class Carta implements Comparable<Carta> {
 
 	private Carta(Fundo fundo, Numero numero, Naipe naipe) {
 		super();
-		this.fundo = Objects.requireNonNull(fundo);
+		this.fundo = fundo;
 		if (numero == null ^ naipe == null) {
 			throw new IllegalStateException();
 		}

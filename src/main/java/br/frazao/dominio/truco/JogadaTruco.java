@@ -10,13 +10,6 @@ import br.frazao.dominio.jogo.Jogador;
 
 public class JogadaTruco implements Jogada {
 
-	public JogadaTruco(Jogador jogador, Carta carta, boolean virada) {
-		super();
-		this.jogador = jogador;
-		this.carta = carta;
-		this.virada = virada;
-	}
-
 	private List<Aposta> apostaList;
 
 	private Carta carta;
@@ -24,6 +17,17 @@ public class JogadaTruco implements Jogada {
 	private Jogador jogador;
 
 	private boolean virada;
+
+	public JogadaTruco(Jogador jogador, Carta carta, boolean virada) {
+		super();
+		this.jogador = jogador;
+		this.carta = carta;
+		this.virada = virada;
+	}
+
+	public void apostar(Truco truco) {
+		getApostaList().add(Aposta.apostar(getJogador()));
+	}
 
 	public List<Aposta> getApostaList() {
 		return Collections.unmodifiableList(apostaList);
@@ -38,9 +42,14 @@ public class JogadaTruco implements Jogada {
 	public Jogador getJogador() {
 		return this.jogador;
 	}
-	
-	public void apostar(Truco truco) {
-		getApostaList().add(Aposta.apostar(getJogador()));
+
+	boolean isVirada() {
+		return virada;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Jogador %s, jogou %s", getJogador().getNome(), isVirada() ? null : getCarta());
 	}
 
 }
