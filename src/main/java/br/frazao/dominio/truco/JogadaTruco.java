@@ -14,11 +14,11 @@ public class JogadaTruco implements Jogada {
 
 	private Carta carta;
 
-	private Jogador jogador;
+	private JogadorTruco jogador;
 
 	private boolean virada;
 
-	public JogadaTruco(Jogador jogador, Carta carta, boolean virada) {
+	public JogadaTruco(JogadorTruco jogador, Carta carta, boolean virada) {
 		super();
 		this.jogador = jogador;
 		this.carta = carta;
@@ -39,7 +39,7 @@ public class JogadaTruco implements Jogada {
 	}
 
 	@Override
-	public Jogador getJogador() {
+	public JogadorTruco getJogador() {
 		return this.jogador;
 	}
 
