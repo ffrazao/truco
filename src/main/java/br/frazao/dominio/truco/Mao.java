@@ -28,13 +28,13 @@ public class Mao {
 
 	private Map<SortedSet<Carta>, Integer> cartaPesoMap;
 
-	private Carta viraCarta = Carta.criar(null, null, null);
-
 	private Map<Integer, List<JogadaTruco>> jogadaMap;
 
 	private List<Carta> manilhaList;
 
 	private JogadorTruco maoJogadorTruco;
+
+	private Carta viraCarta = Carta.criar(null, null, null);
 
 	public Mao(JogadorTruco jogadorMao) {
 		setMaoJogadorTruco(jogadorMao);
@@ -80,10 +80,6 @@ public class Mao {
 		return cartaList.stream().map(this::getCartaPeso).min((p1, p2) -> Integer.compare(p1, p2));
 	}
 
-	public Optional<Carta> getViraCarta() {
-		return Optional.ofNullable(this.viraCarta);
-	}
-
 	private List<JogadaTruco> getJogada() {
 		return getJogada(getJogadaAtual().orElse(null));
 	}
@@ -105,10 +101,14 @@ public class Mao {
 
 	private Map<Integer, List<JogadorTruco>> getJogadaVencedorList(Integer numeroJogada) {
 		Map<Integer, List<JogadorTruco>> result = new LinkedHashMap<>();
-		Optional<Carta> cartaMaior = getJogada(numeroJogada).stream().map(JogadaTruco::getCarta).max((c1, c2) -> getCartaPeso(c1.get()).compareTo(getCartaPeso(c2.get()))).get();
-		List<JogadaTruco> jogadaCartaMaior = getJogada(numeroJogada).stream().filter(jogada -> !jogada.isVirada() && jogada.getCarta().equals(cartaMaior)).collect(Collectors.toList());
-		result.put(numeroJogada, jogadaCartaMaior.stream().map(JogadaTruco::getJogador).collect(Collectors.toList()));
+		Integer maiorPeso = getCartaPesoMaior(getJogada(numeroJogada).stream().map(j -> j.getCarta().get()).collect(Collectors.toList())).get();
+		List<JogadaTruco> jogadaTrucoMaiorCartaPeso = getJogadaCartaPeso(getJogada(numeroJogada), maiorPeso);
+		result.put(numeroJogada, jogadaTrucoMaiorCartaPeso.stream().map(j -> j.getJogador()).collect(Collectors.toList()));
 		return result;
+	}
+
+	private List<JogadaTruco> getJogadaCartaPeso(List<JogadaTruco> jogada, Integer peso) {
+		return jogada.stream().filter(jt -> getCartaPeso(jt.getCarta().get()).equals(peso)).collect(Collectors.toList());
 	}
 
 	private List<Carta> getManilhaList() {
@@ -136,6 +136,10 @@ public class Mao {
 		return cangou == null ? jogadaVencedorAnterior.get(jogadaNumero).get(0) : cangou;
 	}
 
+	public Optional<Carta> getViraCarta() {
+		return Optional.ofNullable(this.viraCarta);
+	}
+
 	private boolean isManilha(Carta carta) {
 		return getManilhaList().contains(carta);
 	}
@@ -157,13 +161,15 @@ public class Mao {
 		// aos jogadores
 		int distribui = corte < 0 ? -Truco.TOTAL_CARTAS_DISTRIBUIR_MAO : Truco.TOTAL_CARTAS_DISTRIBUIR_MAO;
 		truco.getMesa().getJogadorList().stream().forEach(j -> j.getBaralho().encarta(truco.getBaralho().descarta(truco.getBaralho().getCartas(distribui)).get()));
-		// verificar se é necessário virar carta()
+		
+		// verificar se é necessário virar carta
 		Carta viraCarta = null;
 		if (truco.isViraCarta()) {
 			// virar a carta
 			viraCarta = truco.getBaralho().descarta(truco.getBaralho().getCartas(corte < 0 ? -1 : 1)).get().get(0);
 		}
 		setViraCarta(viraCarta, baralhoCopia);
+		
 		// joga no monte o resto das cartas
 		truco.getMonte().encarta(truco.getBaralho().descarta().orElse(null));
 
@@ -207,7 +213,7 @@ public class Mao {
 	}
 
 	private boolean maoFinalizada() {
-		getJogadaMap().entrySet().stream().map((jogada) -> getJogadaVencedorList(jogada.getKey()));
+		getJogadaMap().entrySet().stream().map((jogada) -> getJogadaVencedorList(jogada.getKey()).get(jogada.getKey()));
 		// Map<List<Jogador>, Integer>
 		// getJogadaMap().
 		return false;
@@ -215,6 +221,18 @@ public class Mao {
 
 	private void setCartaPesoMap(Map<SortedSet<Carta>, Integer> cartaPesoMap) {
 		this.cartaPesoMap = Objects.requireNonNull(cartaPesoMap);
+	}
+
+	private void setJogadaMap(Map<Integer, List<JogadaTruco>> jogadaMap) {
+		this.jogadaMap = Objects.requireNonNull(jogadaMap);
+	}
+
+	private void setManilhaList(List<Carta> manilhaList) {
+		this.manilhaList = Objects.requireNonNull(manilhaList);
+	}
+
+	private void setMaoJogadorTruco(JogadorTruco maoJogadorTruco) {
+		this.maoJogadorTruco = maoJogadorTruco;
 	}
 
 	private void setViraCarta(Carta viraCarta, Baralho baralho) {
@@ -261,18 +279,6 @@ public class Mao {
 			// ordenar pelo valor
 			setCartaPesoMap(getCartaPesoMap().entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new)));
 		}
-	}
-
-	private void setJogadaMap(Map<Integer, List<JogadaTruco>> jogadaMap) {
-		this.jogadaMap = Objects.requireNonNull(jogadaMap);
-	}
-
-	private void setManilhaList(List<Carta> manilhaList) {
-		this.manilhaList = Objects.requireNonNull(manilhaList);
-	}
-
-	private void setMaoJogadorTruco(JogadorTruco maoJogadorTruco) {
-		this.maoJogadorTruco = maoJogadorTruco;
 	}
 
 }
