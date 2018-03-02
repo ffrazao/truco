@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -28,6 +29,10 @@ public class Mao {
 
 	private static final List<Numero> VIRA_CARTA_ORDEM_DECRESCENTE_NUMERO = Arrays.asList(Numero.TRES, Numero.DOIS, Numero.AS, Numero.REIS, Numero.VALETE, Numero.DAMA, Numero.SETE, Numero.SEIS, Numero.CINCO, Numero.QUATRO);
 
+	public static Mao criar(JogadorTruco jogadorMao) {
+		return new Mao(jogadorMao);
+	}
+
 	private Map<SortedSet<Carta>, Integer> cartaPesoMap;
 
 	private Map<Integer, List<JogadaTruco>> jogadaMap;
@@ -38,28 +43,28 @@ public class Mao {
 
 	private Carta viraCarta = Carta.criar(null, null, null);
 
-	public Mao(JogadorTruco jogadorMao) {
+	private Mao(JogadorTruco jogadorMao) {
 		setMaoJogadorTruco(jogadorMao);
 	}
 
-	private JogadorTruco getCangou(List<JogadorTruco> jogadorTrucoVencedorList) {
+	private JogadorTruco getCangou(List<JogadorTruco> vencedorJogadorTrucoList) {
 		JogadorTruco result = null;
 		AtomicReference<JogadorTruco> jogador = new AtomicReference<JogadorTruco>(null);
-		if (jogadorTrucoVencedorList != null && jogadorTrucoVencedorList.size() > 1) {
-			jogadorTrucoVencedorList.stream().forEach(j1 -> jogadorTrucoVencedorList.stream().filter(j -> !j.equals(j1)).forEach(j2 -> {
+		if (vencedorJogadorTrucoList != null && vencedorJogadorTrucoList.size() > 1) {
+			vencedorJogadorTrucoList.stream().forEach(j1 -> vencedorJogadorTrucoList.stream().filter(filtro -> !filtro.equals(j1)).forEach(j2 -> {
 				if (jogador.get() == null && !j1.getTime().contains(j2)) {
 					jogador.set(j2);
 				}
 			}));
-		}
-		if (jogador.get() != null) {
-			result = jogador.get();
+			if (jogador. get() != null) {
+				result = jogador.get();
+			}
 		}
 		return result;
 	}
 
 	private Integer getCartaPeso(Carta carta) {
-		return getCartaPesoMap().entrySet().stream().filter(s -> s.getKey().contains(carta)).findAny().get().getValue();
+		return getCartaPesoMap().entrySet().stream().filter(conjuntoCartas -> conjuntoCartas.getKey().contains(carta)).map(k -> k.getValue()).findFirst().get();
 	}
 
 	private List<Integer> getCartaPeso(List<Carta> cartas) {
@@ -142,21 +147,22 @@ public class Mao {
 	}
 
 	private boolean isFinalizada() {
-		Map<Set<JogadorTruco>, Integer> placar = new LinkedHashMap<>(); 
+		Map<Set<JogadorTruco>, Integer> placar = new LinkedHashMap<>();
 		List<JogadorTruco> vencedorList;
-		for (Entry<Integer, List<JogadaTruco>> jogadas: getJogadaMap().entrySet()) {
+		for (Entry<Integer, List<JogadaTruco>> jogadas : getJogadaMap().entrySet()) {
 			vencedorList = getJogadaVencedorList(jogadas.getKey());
 			if (getCangou(vencedorList) != null) {
-				
+
 			}
 		}
-		
-		// vencedorList = getJogadaMap().entrySet().stream().map((jogada) -> getJogadaVencedorList(jogada.getKey()));
+
+		// vencedorList = getJogadaMap().entrySet().stream().map((jogada) ->
+		// getJogadaVencedorList(jogada.getKey()));
 		// Map<List<Jogador>, Integer>
 		// getJogadaMap().
 		return false;
 	}
-	
+
 	private boolean isManilha(Carta carta) {
 		return getManilhaList().contains(carta);
 	}
@@ -194,14 +200,23 @@ public class Mao {
 		try {
 			JogadorTruco jogador = null;
 			for (int c = 0; c < Truco.TOTAL_CARTAS_DISTRIBUIR_MAO; c++) {
+				// iniciar a jogada
 				getJogadaMap().put(c, new ArrayList<>());
+
+				// definir o próximo jogador
 				jogador = jogador == null ? getMaoJogadorTruco() : getProximoJogadorMao();
 				JogadorTruco primeiro = jogador;
+
+				// captar as jogadas
 				do {
 					JogadaTruco jogada = (JogadaTruco) jogador.jogar(truco);
 					getJogada().add(jogada);
 					truco.getMonte().encarta(jogada.getCarta());
-				} while ((primeiro != (jogador = (JogadorTruco) truco.getMesa().getJogadorDepois(jogador).get())) && (!isFinalizada()));
+				} while ((!primeiro.equals((jogador = (JogadorTruco) truco.getMesa().getJogadorDepois(jogador).get()))));
+
+				if (isFinalizada()) {
+					break;
+				}
 			}
 		} catch (RuntimeException e) {
 

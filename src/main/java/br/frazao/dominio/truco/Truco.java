@@ -149,12 +149,12 @@ public class Truco implements Jogo {
 
 		JogadorTruco jogadorMao = (JogadorTruco) getMesa().getJogador(0).get();
 		do {
-			getMaoList().add(new Mao(jogadorMao));
+			getMaoList().add(Mao.criar(jogadorMao));
 			getMao().get().jogar(this);
 			jogadorMao = (JogadorTruco) getMesa().getJogadorDepois(jogadorMao).get();
 		} while (getVencedor() == null);
 
-		return new ResultadoTruco(getMaoList());
+		return new ResultadoTruco(null, null, null, null);
 	}
 
 	private void setMesa(Mesa mesa) {
