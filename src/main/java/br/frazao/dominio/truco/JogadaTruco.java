@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import br.frazao.dominio.elementos.Carta;
 import br.frazao.dominio.jogo.Jogada;
-import br.frazao.dominio.jogo.Jogador;
 
 public class JogadaTruco implements Jogada {
 
