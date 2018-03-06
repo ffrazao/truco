@@ -10,6 +10,8 @@ public class Aposta {
 
 	private List<Jogador> aceitouApostaList;
 
+	private Aposta ampliarAposta;
+
 	private Jogador jogador;
 
 	public Aposta(Jogador jogador) {
@@ -28,12 +30,16 @@ public class Aposta {
 		return Collections.unmodifiableList(aceitouApostaList);
 	}
 
+	public Aposta getAmpliarAposta() {
+		return ampliarAposta;
+	}
+
 	public Jogador getJogador() {
 		return jogador;
 	}
 
-	public static Aposta apostar(Jogador jogador) {
-		return new Aposta(jogador);
+	public void setAmpliarAposta(Aposta ampliarAposta) {
+		this.ampliarAposta = ampliarAposta;
 	}
 
 }

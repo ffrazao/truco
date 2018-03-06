@@ -53,6 +53,10 @@ public class JogadorTruco implements Jogador {
 		return result < -minimoCartasDoCorte || result > minimoCartasDoCorte ? result : minimoCartasDoCorte;
 	}
 
+	public void embaralhar(Baralho baralho) {
+		Collections.shuffle(baralho.getCartas());
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -105,13 +109,12 @@ public class JogadorTruco implements Jogador {
 
 	@Override
 	public Jogada jogar(Jogo jogo) {
-		Truco truco = (Truco) jogo;
-		JogadaTruco result = new JogadaTruco(this, getBaralho().descarta(getBaralho().getCartas(1)).get().get(0), false);
-		return result;
+		return jogar((Truco) jogo);
 	}
 
-	public void embaralhar(Baralho baralho) {
-		Collections.shuffle(baralho.getCartas());
+	public JogadaTruco jogar(Truco truco) {
+		JogadaTruco result = new JogadaTruco(this, getBaralho().descarta(getBaralho().getCartas(1)).get().get(0), false);
+		return result;
 	}
 
 	public void ordenar(Baralho baralho) {
@@ -139,6 +142,23 @@ public class JogadorTruco implements Jogador {
 	@Override
 	public String toString() {
 		return String.format("%s", nome);
+	}
+
+	public boolean aceitarAposta(Aposta aposta, Truco truco) {
+		return false;
+	}
+
+	public static Aposta apostar(JogadorTruco jogador, Truco truco) {
+		Aposta result = new Aposta(jogador);
+		JogadorTruco primeiro = jogador;
+		do {
+			if (!jogador.getTime().contains(primeiro)) {
+				if (jogador.aceitarAposta(result, truco)) {
+					result.getAceitouApostaList().add(jogador);
+				}
+			}
+		} while (primeiro != (jogador = (JogadorTruco) truco.getMesa().getJogadorDepois(jogador).get()));
+		return result;
 	}
 
 }

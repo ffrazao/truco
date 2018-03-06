@@ -25,7 +25,7 @@ public class JogadaTruco implements Jogada {
 	}
 
 	public void apostar(Truco truco) {
-		getApostaList().add(Aposta.apostar(getJogador()));
+		getApostaList().add(Aposta.apostar(getJogador(), truco));
 	}
 
 	public List<Aposta> getApostaList() {

@@ -12,7 +12,7 @@ public interface Jogador extends Comparable<Jogador> {
 
 	public String getNome();
 
-	public <J extends Jogo> Jogada jogar(J jogo);
+	public Jogada jogar(Jogo jogo);
 
 	public void ordenar(Baralho baralho);
 
