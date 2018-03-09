@@ -114,6 +114,7 @@ public class JogadorTruco implements Jogador {
 
 	public JogadaTruco jogar(Truco truco) {
 		JogadaTruco result = new JogadaTruco(this, getBaralho().descarta(getBaralho().getCartas(1)).get().get(0), false);
+		truco.getMao().get().getJogada().apostar(this, truco);
 		return result;
 	}
 
@@ -144,21 +145,13 @@ public class JogadorTruco implements Jogador {
 		return String.format("%s", nome);
 	}
 
-	public boolean aceitarAposta(Aposta aposta, Truco truco) {
-		return false;
-	}
-
-	public static Aposta apostar(JogadorTruco jogador, Truco truco) {
-		Aposta result = new Aposta(jogador);
-		JogadorTruco primeiro = jogador;
-		do {
-			if (!jogador.getTime().contains(primeiro)) {
-				if (jogador.aceitarAposta(result, truco)) {
-					result.getAceitouApostaList().add(jogador);
-				}
-			}
-		} while (primeiro != (jogador = (JogadorTruco) truco.getMesa().getJogadorDepois(jogador).get()));
-		return result;
+	public boolean aceitarAposta(Truco truco) {
+		if (Math.random() * 1 > .5) {
+			truco.getMao().get().getJogada().apostar(this, truco);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

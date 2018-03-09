@@ -8,9 +8,11 @@ import br.frazao.dominio.jogo.Jogador;
 
 public class Aposta {
 
-	private List<Jogador> aceitouApostaList;
+	public static Aposta criar(Jogador jogador) {
+		return new Aposta(jogador);
+	}
 
-	private Aposta ampliarAposta;
+	private List<Jogador> aceitouApostaList;
 
 	private Jogador jogador;
 
@@ -30,16 +32,8 @@ public class Aposta {
 		return Collections.unmodifiableList(aceitouApostaList);
 	}
 
-	public Aposta getAmpliarAposta() {
-		return ampliarAposta;
-	}
-
 	public Jogador getJogador() {
 		return jogador;
-	}
-
-	public void setAmpliarAposta(Aposta ampliarAposta) {
-		this.ampliarAposta = ampliarAposta;
 	}
 
 }
