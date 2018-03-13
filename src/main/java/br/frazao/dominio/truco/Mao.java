@@ -224,13 +224,12 @@ public class Mao {
 
 				// definir o próximo jogador
 				jogador = jogador == null ? getMaoJogadorTruco() : getProximoJogadorMao();
-				JogadorTruco primeiro = jogador;
+				final JogadorTruco primeiro = jogador;
 
 				// captar as jogadas
 				do {
-					JogadaTruco jogada = (JogadaTruco) jogador.jogar(truco);
-					getJogadaList().add(jogada);
-					truco.getMonte().encarta(jogada.getCarta());
+					getJogadaList().add(jogador.jogar(truco));
+					truco.getBaralho().encarta(getJogada().getCarta());
 				} while ((!primeiro.equals((jogador = (JogadorTruco) truco.getMesa().getJogadorDepois(jogador).get()))));
 
 				if (isFinalizada()) {

@@ -1,12 +1,12 @@
 package br.frazao.dominio.truco;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import br.frazao.dominio.elementos.Baralho;
@@ -36,7 +36,7 @@ public class Truco implements Jogo {
 	private boolean usarCoringa = false;
 
 	private boolean viraCarta = false;
-	
+
 	public Truco(boolean viraCarta, boolean baralhoVazio) {
 		this(viraCarta, baralhoVazio, false);
 	}
@@ -104,21 +104,11 @@ public class Truco implements Jogo {
 	}
 
 	public Map<Set<JogadorTruco>, Integer> getTentos() {
-		Map<Set<JogadorTruco>, Integer> result = new TreeMap<>((t1, t2) -> t1.containsAll(t2) ? 0 : 1);
-		getMesa().getJogadorList().stream().forEach(j -> result.put(((JogadorTruco) j).getTime(), 0));
+		Map<Set<JogadorTruco>, Integer> result = new LinkedHashMap<>();
+		for (Mao mao : getMaoList()) {
+			
+		}
 		return result;
-	}
-
-	Integer getTentos(JogadorTruco jogador) {
-		return null;
-	}
-
-	Map<Set<JogadorTruco>, Integer> getTentos(Mao mao) {
-		return null;
-	}
-
-	Integer getTentos(Set<JogadorTruco> jogador) {
-		return null;
 	}
 
 	public Set<JogadorTruco> getVencedor() {
@@ -154,6 +144,7 @@ public class Truco implements Jogo {
 			jogadorMao = (JogadorTruco) getMesa().getJogadorDepois(jogadorMao).get();
 		} while (getVencedor() == null);
 
+		System.out.format("\n\n\ntime vencedor [%s]", getVencedor());
 		return new ResultadoTruco(null, null, null, null);
 	}
 

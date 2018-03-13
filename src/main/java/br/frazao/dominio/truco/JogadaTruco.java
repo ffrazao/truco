@@ -70,7 +70,10 @@ public class JogadaTruco implements Jogada {
 	}
 
 	public List<Aposta> getApostaList() {
-		return Collections.unmodifiableList(apostaList);
+		if (this.apostaList == null) {
+			this.apostaList = new ArrayList<>();
+		}
+		return this.apostaList;
 	}
 
 	@Override

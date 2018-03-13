@@ -114,7 +114,7 @@ public class JogadorTruco implements Jogador {
 
 	public JogadaTruco jogar(Truco truco) {
 		JogadaTruco result = new JogadaTruco(this, getBaralho().descarta(getBaralho().getCartas(1)).get().get(0), false);
-		truco.getMao().get().getJogada().apostar(this, truco);
+		result.apostar(this, truco);
 		return result;
 	}
 
